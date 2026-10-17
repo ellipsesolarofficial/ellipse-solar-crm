@@ -7,7 +7,7 @@ import secrets
 import time
 import traceback
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import store
 
@@ -159,7 +159,7 @@ class App(BaseHTTPRequestHandler):
             if not path.startswith(prefix):
                 self._error(404, 'Not found')
                 return
-            lead = store.update_lead(user, path[len(prefix):], read_body(self))
+            lead = store.update_lead(user, unquote(path[len(prefix):]), read_body(self))
             self._json(200, {'lead': lead})
         except ValueError as error:
             self._error(400, str(error))
@@ -178,7 +178,7 @@ class App(BaseHTTPRequestHandler):
             if not path.startswith(prefix):
                 self._error(404, 'Not found')
                 return
-            store.delete_user(user, path[len(prefix):])
+            store.delete_user(user, unquote(path[len(prefix):]))
             self._json(200, {'ok': True})
         except ValueError as error:
             self._error(400, str(error))
@@ -219,11 +219,14 @@ class App(BaseHTTPRequestHandler):
 
 
 def main():
-    store.ensure_seed()
+    info = store.prepare()
     server = ThreadingHTTPServer((HOST, PORT), App)
     print('Ellipse Solar CRM')
     print('http://%s:%d' % (HOST, PORT))
-    print('Local admin PIN: %s' % store.PIN_PATH)
+    if info:
+        print('Sheet: %s (%d leads, %d people)' % (info['sheet'], info['leads'], info['users']))
+    else:
+        print('Local admin PIN: %s' % store.PIN_PATH)
     server.serve_forever()
 
 

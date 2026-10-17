@@ -23,7 +23,7 @@ const phoneDigits = (value) => {
 };
 
 const priceNumber = (value) => {
-  const text = String(value || '').trim().toLowerCase().replace(/,/g, '');
+  const text = String(value || '').trim().toLowerCase().replace(/₹/g, '').replace(/,/g, '');
   const amount = parseFloat(text);
   if (!amount) return 0;
   if (text.includes('crore')) return amount * 10000000;
@@ -96,7 +96,12 @@ function startLeads(user) {
 
   const load = async () => {
     pack = await call('/api/leads');
-    $('sample').hidden = !pack.leads.some((lead) => lead.sample);
+    if (pack.source) {
+      $('sample').hidden = false;
+      $('sample').textContent = pack.source;
+    } else {
+      $('sample').hidden = !pack.leads.some((lead) => lead.sample);
+    }
     render();
   };
 
@@ -341,7 +346,7 @@ function startAdmin(user) {
     }
     pendingDelete = '';
     try {
-      await call('/api/users/' + id, { method: 'DELETE' });
+      await call('/api/users/' + encodeURIComponent(id), { method: 'DELETE' });
       $('userError').textContent = '';
       await load();
     } catch (error) {

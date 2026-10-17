@@ -8,12 +8,20 @@ This is a new app in `ellipse-crm`. It does not replace the live Google Apps Scr
 
 ```bash
 cd ellipse-crm
-python3 server.py
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python server.py
 ```
 
 Open http://127.0.0.1:8787
 
-The first start creates an Admin user and writes the PIN to `data/dev-pin.txt`. That file is not committed. Three sample visits are included so the day strip and filters are visible. They are labeled as samples.
+Without a sheet configured, the first start creates an Admin user and writes the PIN to `data/dev-pin.txt`. That file is not committed. Three sample visits are included so the day strip and filters are visible.
+
+## Google Sheet
+
+Copy `sheet.example.json` to `data/sheet.json`. Set `api_url` to the Apps Script web app link and `api_key` to the private `CRM_API_KEY` stored in the script properties. That file stays off GitHub.
+
+The script reads the spreadsheet it is bound to. Right now that is the copy of the home-visit response sheet. Moving to the main sheet means binding the same script to the main sheet. Sign in with the employee name and PIN already stored on the sheet. New PINs use the same format, so the Google CRM can use them too.
 
 ## Pages
 
@@ -24,10 +32,4 @@ Sales see their own visits plus visits with no owner. Telecallers see leads wher
 
 A repeated phone number updates the existing lead instead of creating a second one.
 
-## Google Sheets
-
-The server is the database boundary (`store.py`). The next step is to point that module at a private Google Sheet with a service account that stays out of the public code. The sheet is not connected yet, so this copy does not read the live customer responses.
-
-## Publish later
-
-GitHub can store this code. It does not run the Python server. Hosting the running app comes after the code is in the repository.
+The repository is https://github.com/ellipsesolarofficial/ellipse-solar-crm. GitHub stores the code. The running app stays on this computer and talks to the private sheet.

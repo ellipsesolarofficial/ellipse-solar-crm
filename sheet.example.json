@@ -1,0 +1,9 @@
+{
+  "spreadsheet_id": "PUT_THE_SHEET_ID_HERE",
+  "responses_tab": "Form Responses 1",
+  "users_tab": "CRM_Users",
+  "activity_tab": "CRM_Activity",
+  "label": "Copy of Home Visit Details Form (Responses)",
+  "api_url": "https://script.google.com/macros/s/DEPLOYMENT_ID/exec",
+  "api_key": "PUT_THE_PRIVATE_KEY_HERE"
+}

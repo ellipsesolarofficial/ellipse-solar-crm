@@ -257,7 +257,29 @@ def public_user(user):
     return {'id': user['id'], 'name': user['name'], 'role': user['role']}
 
 
+def _sheet():
+    if not os.path.exists(os.path.join(DATA, 'sheet.json')):
+        return None
+    import sheet_db
+    return sheet_db.connect()
+
+
+def using_sheet():
+    return os.path.exists(os.path.join(DATA, 'sheet.json'))
+
+
+def prepare():
+    database = _sheet()
+    if database:
+        return database.ping()
+    ensure_seed()
+    return None
+
+
 def authenticate(name, pin):
+    database = _sheet()
+    if database:
+        return database.authenticate(name, pin)
     ensure_seed()
     with _lock:
         data = _read()
@@ -293,6 +315,9 @@ def lead_public(lead):
 
 
 def dashboard(user):
+    database = _sheet()
+    if database:
+        return database.dashboard(user)
     ensure_seed()
     with _lock:
         data = _read()
@@ -318,6 +343,9 @@ def _new_id(data, prefix):
 
 
 def create_lead(user, fields):
+    database = _sheet()
+    if database:
+        return database.create_lead(user, fields)
     name = str(fields.get('customer_name') or '').strip()
     phone = str(fields.get('phone') or '').strip()
     if not name:
@@ -388,6 +416,9 @@ def create_lead(user, fields):
 
 
 def update_lead(user, lead_id, changes):
+    database = _sheet()
+    if database:
+        return database.update_lead(user, lead_id, changes)
     changes = changes or {}
     with _lock:
         data = _read()
@@ -437,6 +468,9 @@ def update_lead(user, lead_id, changes):
 
 
 def list_users(user):
+    database = _sheet()
+    if database:
+        return database.list_users(user)
     if user['role'] != 'admin':
         raise ValueError('Only an admin can do that')
     with _lock:
@@ -445,6 +479,9 @@ def list_users(user):
 
 
 def create_user(actor, name, role, pin):
+    database = _sheet()
+    if database:
+        return database.create_user(actor, name, role, pin)
     if actor['role'] != 'admin':
         raise ValueError('Only an admin can do that')
     name = str(name or '').strip()
@@ -473,6 +510,9 @@ def create_user(actor, name, role, pin):
 
 
 def delete_user(actor, user_id):
+    database = _sheet()
+    if database:
+        return database.delete_user(actor, user_id)
     if actor['role'] != 'admin':
         raise ValueError('Only an admin can do that')
     with _lock:
@@ -492,6 +532,9 @@ def delete_user(actor, user_id):
 
 
 def activity_for(user):
+    database = _sheet()
+    if database:
+        return database.activity_for(user)
     if user['role'] != 'admin':
         raise ValueError('Only an admin can do that')
     with _lock:
