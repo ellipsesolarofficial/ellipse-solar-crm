@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin · Ellipse Solar</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body data-page="admin">
+  <header class="bar">
+    <a class="brand" href="/">Ellipse Solar</a>
+    <nav id="nav"></nav>
+  </header>
+  <main class="wrap">
+    <h1>Employees</h1>
+    <p class="muted">Create a sign-in, or delete one. Deleting a person leaves their leads in place. This page is separate from the lead list.</p>
+    <form id="userForm" class="grid user-form">
+      <div class="split">
+        <label>Name <input name="name" required placeholder="Employee name"></label>
+        <label>Role
+          <select name="role">
+            <option value="telecaller">Telecaller</option>
+            <option value="sales">Sales</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+      </div>
+      <label>PIN <input name="pin" type="password" inputmode="numeric" minlength="8" maxlength="12" placeholder="8–12 digit PIN" required></label>
+      <div class="actions">
+        <button class="btn" type="submit">Add employee</button>
+      </div>
+      <p id="userError" class="error" role="alert"></p>
+    </form>
+    <ul id="people" class="people"></ul>
+    <h2>Activity</h2>
+    <ul id="activity" class="log"></ul>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

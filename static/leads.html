@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leads · Ellipse Solar</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body data-page="leads">
+  <header class="bar">
+    <a class="brand" href="/">Ellipse Solar</a>
+    <nav id="nav"></nav>
+  </header>
+  <main class="wrap">
+    <p id="sample" class="note" hidden>The first three visits are samples, so you can try the day strip and filters. Add a real enquiry when you are ready.</p>
+    <div id="days" class="days"></div>
+    <div class="tools">
+      <input id="search" type="search" placeholder="Search name, phone, address" aria-label="Search leads">
+      <select id="due" aria-label="Follow-up date">
+        <option value="">All follow-ups</option>
+        <option value="today">Due today</option>
+        <option value="overdue">Overdue</option>
+        <option value="undated">Visit date not set</option>
+      </select>
+    </div>
+    <div id="chips" class="chips"></div>
+    <div id="list" class="list"></div>
+  </main>
+
+  <dialog id="addDialog">
+    <form id="addForm" class="grid">
+      <h2>New lead</h2>
+      <label>Customer name <input name="customer_name" required></label>
+      <label>Phone <input name="phone" inputmode="tel" required></label>
+      <label>Address <input name="address"></label>
+      <label>Google Maps link <input name="maps_url" inputmode="url" placeholder="https://"></label>
+      <div class="split">
+        <label>Site kW <input name="site_kw"></label>
+        <label>Brand <input name="brand"></label>
+      </div>
+      <label>Quoted price <input name="quoted_price" placeholder="240000 or 2.4 lakh"></label>
+      <label>Desired visit <input name="visit_at" type="datetime-local"></label>
+      <label>Remarks <textarea name="remarks" rows="3"></textarea></label>
+      <div class="split">
+        <label>Telecaller <input name="telecaller"></label>
+        <label>Visit assigned to
+          <select name="assignee" id="addAssignee"></select>
+        </label>
+      </div>
+      <p id="addError" class="error" role="alert"></p>
+      <div class="actions">
+        <button class="btn quiet" type="button" id="addCancel">Cancel</button>
+        <button class="btn" type="submit">Save lead</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="editDialog">
+    <form id="editForm" class="grid">
+      <h2 id="editTitle">Update visit</h2>
+      <label id="statusField">Visit status <select name="status" id="editStatus"></select></label>
+      <fieldset id="docsField">
+        <legend>Documents</legend>
+        <div id="docs" class="checks"></div>
+      </fieldset>
+      <div class="split">
+        <label>Next action <select name="next_action" id="editAction"></select></label>
+        <label>Next action date <input name="next_action_date" type="date"></label>
+      </div>
+      <div class="split">
+        <label>Next action assigned to <select name="next_action_assignee" id="editNextAssignee"></select></label>
+        <label>Visit assigned to <select name="assignee" id="editAssignee"></select></label>
+      </div>
+      <label>Desired visit <input name="visit_at" type="datetime-local"></label>
+      <label>Visit remarks <textarea name="visit_remarks" rows="3"></textarea></label>
+      <p id="editError" class="error" role="alert"></p>
+      <div class="actions">
+        <button class="btn quiet" type="button" id="editCancel">Cancel</button>
+        <button class="btn" type="submit">Save</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="/app.js"></script>
+</body>
+</html>
