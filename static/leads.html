@@ -39,7 +39,10 @@
         <label>Brand <input name="brand"></label>
       </div>
       <label>Quoted price <input name="quoted_price" placeholder="240000 or 2.4 lakh"></label>
-      <label>Desired visit <input name="visit_at" type="datetime-local"></label>
+      <div class="split">
+        <label>Visit date <input name="visit_date" type="date"></label>
+        <label>Visit time <input name="visit_time" type="time"></label>
+      </div>
       <label>Remarks <textarea name="remarks" rows="3"></textarea></label>
       <div class="split">
         <label>Telecaller <input name="telecaller"></label>
@@ -71,7 +74,10 @@
         <label>Next action assigned to <select name="next_action_assignee" id="editNextAssignee"></select></label>
         <label>Visit assigned to <select name="assignee" id="editAssignee"></select></label>
       </div>
-      <label>Desired visit <input name="visit_at" type="datetime-local"></label>
+      <div class="split">
+        <label>Visit date <input name="visit_date" type="date"></label>
+        <label>Visit time <input name="visit_time" type="time"></label>
+      </div>
       <label>Visit remarks <textarea name="visit_remarks" rows="3"></textarea></label>
       <p id="editError" class="error" role="alert"></p>
       <div class="actions">

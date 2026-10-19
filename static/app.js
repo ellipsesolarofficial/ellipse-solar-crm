@@ -94,6 +94,28 @@ function startLeads(user) {
   let dayFilter = '';
   let editing = null;
 
+  const splitVisit = (value) => {
+    const text = String(value || '').trim().replace(' ', 'T');
+    return {
+      date: /^\d{4}-\d{2}-\d{2}/.test(text) ? text.slice(0, 10) : '',
+      time: text.length >= 16 && text[10] === 'T' ? text.slice(11, 16) : '',
+    };
+  };
+
+  const joinVisit = (date, time) => {
+    const day = String(date || '').trim();
+    const clock = String(time || '').trim();
+    return day && clock ? day + 'T' + clock : day;
+  };
+
+  document.querySelectorAll('input[type="date"], input[type="time"]').forEach((input) => {
+    input.addEventListener('click', () => {
+      if (typeof input.showPicker === 'function') {
+        try { input.showPicker(); } catch (error) {}
+      }
+    });
+  });
+
   const load = async () => {
     pack = await call('/api/leads');
     if (pack.source) {
@@ -240,6 +262,9 @@ function startLeads(user) {
     event.preventDefault();
     const form = new FormData(event.target);
     const payload = Object.fromEntries(form.entries());
+    payload.visit_at = joinVisit(payload.visit_date, payload.visit_time);
+    delete payload.visit_date;
+    delete payload.visit_time;
     try {
       const result = await call('/api/leads', { method: 'POST', body: JSON.stringify(payload) });
       $('addForm').reset();
@@ -264,7 +289,9 @@ function startLeads(user) {
     $('editAction').innerHTML = '<option value="">None</option>' +
       pack.actions.map((action) => '<option' + (action === editing.next_action ? ' selected' : '') + '>' + escapeHtml(action) + '</option>').join('');
     form.elements.next_action_date.value = editing.next_action_date || '';
-    form.elements.visit_at.value = editing.visit_at || '';
+    const visit = splitVisit(editing.visit_at);
+    form.elements.visit_date.value = visit.date;
+    form.elements.visit_time.value = visit.time;
     form.elements.visit_remarks.value = editing.visit_remarks || '';
     fillPeople($('editAssignee'), editing.assignee || '');
     fillPeople($('editNextAssignee'), editing.next_action_assignee || '');
@@ -291,7 +318,7 @@ function startLeads(user) {
       next_action_date: form.get('next_action_date') || '',
       next_action_assignee: form.get('next_action_assignee') || '',
       assignee: form.get('assignee') || '',
-      visit_at: form.get('visit_at') || '',
+      visit_at: joinVisit(form.get('visit_date'), form.get('visit_time')),
       visit_remarks: form.get('visit_remarks') || '',
     };
     if (user.role !== 'telecaller') {
