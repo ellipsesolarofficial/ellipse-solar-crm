@@ -203,7 +203,9 @@ function startLeads(user) {
       const phone = phoneDigits(lead.phone);
       const amount = priceNumber(lead.quoted_price);
       const monthly = emi(amount);
-      const visitDay = String(lead.visit_at || '').slice(0, 10);
+      const visitParts = splitVisit(lead.visit_at);
+      const visitDay = visitParts.date;
+      const visitLabel = visitDay ? ((visitDay === pack.today ? 'Today' : 'Visit ' + visitDay) + (visitParts.time ? ' · ' + visitParts.time : '')) : '';
       const state = dueState(lead);
       const docs = (lead.documents || []).length;
       const bits = [
@@ -211,6 +213,7 @@ function startLeads(user) {
         escapeHtml(lead.brand || ''),
         amount ? escapeHtml(inr(amount)) : '',
         monthly ? 'EMI ' + escapeHtml(inr(monthly)) + '/mo' : '',
+        lead.assignee ? 'Assigned: ' + escapeHtml(lead.assignee) : '',
         docs ? docs + '/' + pack.documents.length + ' docs' : '',
       ].filter(Boolean).join(' · ');
       const next = lead.next_action
@@ -221,7 +224,7 @@ function startLeads(user) {
       return '<article class="lead' + (visitDay === pack.today ? ' today' : '') + '">' +
         '<div class="lead-top"><div><h2>' + escapeHtml(lead.customer_name) + '</h2>' +
         '<p class="meta">' + escapeHtml(lead.phone || '') + (lead.address ? ' · ' + escapeHtml(lead.address) : '') + '</p></div>' +
-        '<div class="status">' + (visitDay === pack.today ? '<div class="today-word">Today</div>' : '') +
+        '<div class="status">' + (visitLabel ? '<div class="today-word">' + escapeHtml(visitLabel) + '</div>' : '') +
         escapeHtml(lead.status || 'Not updated') + '</div></div>' +
         (bits ? '<p class="facts">' + bits + '</p>' : '') + next +
         '<div class="row-actions">' +
