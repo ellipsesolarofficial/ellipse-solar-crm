@@ -225,7 +225,7 @@ function startLeads(user) {
         escapeHtml(lead.status || 'Not updated') + '</div></div>' +
         (bits ? '<p class="facts">' + bits + '</p>' : '') + next +
         '<div class="row-actions">' +
-        (phone ? '<a href="tel:+' + phone + '">Call</a><a href="https://wa.me/' + phone + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
+        (phone ? '<a href="tel:+' + phone + '" target="_blank" rel="noopener">Call</a><a href="https://wa.me/' + phone + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
         (lead.maps_url ? '<a href="' + escapeHtml(lead.maps_url) + '" target="_blank" rel="noopener">Map</a>' : '') +
         '<button type="button" class="text-btn" data-edit="' + escapeHtml(lead.id) + '">Update</button></div></article>';
     }).join('');
